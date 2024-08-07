@@ -1,25 +1,27 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import { fetchCharacters } from './services/swapi';
+import CharacterCard from './components/CharacterCard';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [characters, setCharacters] = useState([]);
+
+  useEffect(() => {
+    const getCharacters = async () => {
+      const characters = await fetchCharacters();
+      setCharacters(characters);
+    };
+
+    getCharacters();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      {characters.map((character, index) => (
+        <CharacterCard key={index} name={character.name} films={character.films} />
+      ))}
     </div>
   );
-}
+};
 
 export default App;
